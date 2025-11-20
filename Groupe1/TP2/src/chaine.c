@@ -1,31 +1,44 @@
+/* 
+ * Fichier : chaine.c
+ * Auteur : Baptiste Rousselot, Camille Morfin
+ * Description : Dans ce programme, on va effectuer trois opérations sur deux chaines de caractères
+ *                  - Calcule de la longueur
+ *                  - Copie d'une chaine dans une autre
+ *                  - Concaténation de deux chaine
+*/
+
 #include <stdio.h>
 #include <string.h>
 
+/* --- calcule la taille d'une chaine --- */
 int lengthexo(char text[255]) {
     int totlen = 0;
 
-    for(int i = 0; text[i] !='\0';i++){
+    /* --- Parcours de toute la chaine --- */
+    for(int i = 0; text[i] !='\0';i++){ // S'arrête si on croise le '\0'
         totlen++;
     }
     return totlen;
 }
 
+/* --- Concaténation de deux chaines de caractères --- */
 void concat(char dest[255], const char src[255]) {
-    int dest_len = lengthexo(dest);
+    int dest_len = lengthexo(dest); // Donne l'emplacement de la fin de la première chaine et le début de la nouvelle
     int src_i = 0;
 
-    /* Copie tant qu'il reste de la place */
+    /* --- Copie tant qu'il reste de la place --- */
     while (dest_len < 254 && src[src_i] != '\0') {
         dest[dest_len++] = src[src_i++];
     }
     dest[dest_len] = '\0';
 }
 
+/* --- Copie d'une chaine de caractère dans une autre --- */
 void copie(char dest[255], const char src[255]) {
     int dest_i = 0;
     int src_i = 0;
 
-    /* Copie tant qu'il reste de la place */
+    /* --- Copie tant qu'il reste de la place --- */
     while (dest_i < 254 && src[src_i] != '\0') {
         dest[dest_i++] = src[src_i++];
     }

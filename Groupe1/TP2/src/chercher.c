@@ -1,3 +1,9 @@
+/* 
+ * Fichier : cherhcer.c
+ * Auteur : Baptiste Rousselot, Camille Morfin
+ * Description : Dans ce programme, on va chercher dans un tableau si la phrase est présente ou non dedans
+*/
+
 #include <stdio.h>
 
 #define N_PHRASES 10
