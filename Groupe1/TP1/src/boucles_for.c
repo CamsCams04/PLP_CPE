@@ -1,3 +1,7 @@
+/* Fichier : boucle_for.c
+   Auteur : Baptiste Rousselot, Camille Morfin
+   Description : Dessine une pyramide en fonction de la taille donnée par l'utilisateur. (avec une boucle for)
+*/
 #include <stdio.h>
 
 int main() {

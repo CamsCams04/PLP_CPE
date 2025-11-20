@@ -1,3 +1,7 @@
+/* Fichier : boucle_while.c
+   Auteur : Baptiste Rousselot, Camille Morfin
+   Description : Dessine une pyramide en fonction de la taille donnée par l'utilisateur. (avec une boucle while)
+*/
 #include <stdio.h>
 
 int main(){
