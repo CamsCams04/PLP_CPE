@@ -1,3 +1,7 @@
+/* Fichier : calculs.c
+   Auteur : Baptiste Rousselot, Camille Morfin
+   Description : Ce code réalise des calculs mathématiques de base en fonction de l'entrée utilisateur.
+*/
 #include <stdio.h>
 
 int main() {

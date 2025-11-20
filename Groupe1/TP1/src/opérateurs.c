@@ -1,3 +1,7 @@
+/* Fichier : opérateur.c
+   Auteur : Baptiste Rousselot, Camille Morfin
+   Description : Compare deux entiers
+*/
 #include <stdio.h>
 
 int main() {

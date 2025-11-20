@@ -1,3 +1,7 @@
+/* Fichier : variables.c
+   Auteur : Baptiste Rousselot, Camille Morfin
+   Description : assignation et affichage des différentes variables
+*/
 #include <stdio.h>
 #include <limits.h>
 #include <float.h>

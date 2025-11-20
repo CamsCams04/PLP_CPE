@@ -1,3 +1,7 @@
+/* Fichier : sizeof_types.c
+   Auteur : Baptiste Rousselot, Camille Morfin
+   Description : indique la taille des différents types de données en C
+*/
 #include <stdio.h>
 
 int main() {

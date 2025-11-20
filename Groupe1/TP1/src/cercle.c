@@ -1,3 +1,7 @@
+/* Fichier : cercle.c
+   Auteur : Baptiste Rousselot, Camille Morfin
+   Description : Ce programme calcule l'aire et le périmètre d'un cercle en fonction du rayon donné par l'utilisateur.
+*/
 #include <stdio.h>
 #include <math.h>
 
