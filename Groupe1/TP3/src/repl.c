@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "date_utils.h"
 
 /**
  * Programme qui simule un interpréteur de commandes simple.
@@ -42,6 +43,10 @@ int main()
                 printf("%c", commande[i]);
             }
             printf("\n"); // Saut de ligne après la sortie
+        }
+        /* --- Traite la commande "date" pour afficher la date du jour --- */
+        else if (strcmp(commande, "date") == 0) {
+            afficher_date();
         }
         else
         {

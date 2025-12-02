@@ -32,9 +32,13 @@ L'objectif du premier exercice est de comprendre le fonctionnement de l'interpr�
 **Questions à réfléchir :**
 
 * Qu'est-ce qui se passe lorsque vous tapez une commande inconnue?
+	* *Le prompt va afficher `commande non reconnue...`*
 * Comment l'interpréteur traite les espaces dans les commandes?
+	* *L'interpreteur va traiter les espace comme séparation entre les différents arguments de la commande*
 * Qu'est-ce qui se passe lorsque vous utilisez la commande `echo` avec des arguments?
+	* *Tout se qui va se trouver après le echo va être considéré comme le **texte à écrire***
 * Comment pourriez-vous modifier le code pour ajouter de nouvelles commandes?
+	* Il faut rajouter un nouvel `else if` afin de pouvoir rajouter une nouvelles commande car il y a un `else if` par commande*
 
 **Conseils pour la modification du code :**
 
