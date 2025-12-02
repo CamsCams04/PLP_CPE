@@ -7,6 +7,32 @@
  * Il lit les commandes utilisateur et les traite en fonction de leur contenu.
  */
 
+void afficher_version(){
+    char version[255] = "12.12.12";
+
+    printf("Version %s\n", version);
+}
+
+void afficher_help(){
+    printf("Voici la liste des commandes :\n");
+    printf("================================\n");
+    printf("echo <texte>   : Affiche le texte saisi après la commande.\n");
+    printf("quit           : Quitte le programme.\n");
+    printf("version        : Affiche la version du programme.\n");
+    printf("help           : Affiche cette liste d'aide.\n");
+}
+
+void traiter_echo(const char *commande){
+// Traite la commande "echo" pour afficher du texte
+    printf("Echo: ");
+    // Imprime la chaîne
+    for (int i = 5; commande[i] != '\0'; i++)
+    {
+        printf("%c", commande[i]);
+    }
+    printf("\n"); // Saut de ligne après la sortie
+}
+
 int main()
 {
     int continuer = 1; // Variable pour contrôler la boucle principale
@@ -34,15 +60,13 @@ int main()
         }
         else if (strncmp(commande, "echo ", 5) == 0)
         {
-            // Traite la commande "echo" pour afficher du texte
-            printf("Echo: ");
-
-            // Imprime la chaîne
-            for (int i = 5; commande[i] != '\0'; i++)
-            {
-                printf("%c", commande[i]);
-            }
-            printf("\n"); // Saut de ligne après la sortie
+            traiter_echo(commande);
+        }
+        else if (strcmp(commande, "version") == 0){
+            afficher_version();
+        }
+        else if (strcmp(commande, "help") == 0) {
+            afficher_help();
         }
         /* --- Traite la commande "date" pour afficher la date du jour --- */
         else if (strcmp(commande, "date") == 0) {
