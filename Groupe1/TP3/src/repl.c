@@ -6,6 +6,22 @@
  * Programme qui simule un interpréteur de commandes simple.
  * Il lit les commandes utilisateur et les traite en fonction de leur contenu.
  */
+// struct Commande
+// {
+//     char name[255];
+// };
+enum Functions{
+    version,
+    help,
+    echo,
+    quit,
+    date
+};
+
+void afficher_version();
+void afficher_help();
+void traiter_echo(const char *commande);
+int quiting();
 
 void afficher_version(){
     char version[255] = "12.12.12";
@@ -17,10 +33,11 @@ void afficher_help(){
     printf("Voici la liste des commandes :\n");
     printf("================================\n");
     printf("echo <texte>   : Affiche le texte saisi après la commande.\n");
-    printf("quit           : Quitte le programme.\n");
     printf("version        : Affiche la version du programme.\n");
     printf("help           : Affiche cette liste d'aide.\n");
-}
+    printf("date           : Afficher la date\n");
+    printf("\nquit           : Quitte le programme.\n");
+};
 
 void traiter_echo(const char *commande){
 // Traite la commande "echo" pour afficher du texte
@@ -31,6 +48,12 @@ void traiter_echo(const char *commande){
         printf("%c", commande[i]);
     }
     printf("\n"); // Saut de ligne après la sortie
+}
+
+int quiting(){
+    // Quitte le programme si la commande est "quit"
+    printf("Arrêt...\n");
+    return 0;
 }
 
 int main()
@@ -51,35 +74,41 @@ int main()
         // Enlève le caractère de fin de ligne ajouté par fgets
         commande[strcspn(commande, "\n")] = 0;
 
-        // Traite la commande en fonction de son contenu
+        enum Functions fonction = -1;
         if (strcmp(commande, "quit") == 0)
-        {
-            // Quitte le programme si la commande est "quit"
-            printf("Arrêt...\n");
-            continuer = 0;
-        }
+            fonction = quit;
         else if (strncmp(commande, "echo ", 5) == 0)
+            fonction = echo;
+        else if (strcmp(commande, "version") == 0)
+            fonction = version;
+        else if (strcmp(commande, "help") == 0)
+            fonction = help;
+        else if (strcmp(commande, "date") == 0)
+            fonction = date;
+
+        switch (fonction)
         {
+        case quit:
+            continuer = quiting();
+            break;
+        case echo:
             traiter_echo(commande);
-        }
-        else if (strcmp(commande, "version") == 0){
+            break;
+        case version:
             afficher_version();
-        }
-        else if (strcmp(commande, "help") == 0) {
+            break;
+        case help:
             afficher_help();
-        }
-        /* --- Traite la commande "date" pour afficher la date du jour --- */
-        else if (strcmp(commande, "date") == 0) {
+            break;
+        case date:
             afficher_date();
-        }
-        else
-        {
-            // Affiche un message d'erreur si la commande est inconnue
+            break;
+        default:
             printf("Commande non reconnue. Essayez 'echo <text>' pour afficher du texte, ou tapez 'quit' pour quitter.\n");
+            break;
         }
 
-        printf("\n"); // Saut de ligne après la sortie
+        printf("\n");
     }
-
     return 0;
 }
