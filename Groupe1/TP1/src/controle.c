@@ -1,6 +1,6 @@
 /* Fichier : controle.c
    Auteur : Baptiste Rousselot, Camille Morfin
-   Description : Parcours les 100 premier entier (3 méthodes différentes).
+   Description : Parcours les 100 premier entier (3 méthodes différentes) et applique les règles.
 */
 #include <stdio.h>
 

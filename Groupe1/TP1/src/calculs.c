@@ -20,6 +20,7 @@ int main() {
         scanf("%d", &num2);
     }
 
+    /* --- Permet de gérer plusieurs case --- */
     switch(op) {
         case '+':
             printf("%d %c %d = %d\n", num1, op, num2, (num1 + num2));

@@ -14,9 +14,11 @@ int main(){
     while(i < size){
         int j = 0;
         while(j <= i ){
+            /* --- Vérification des bords --- */
             if(j==0 || j==i || i == size-1){
                 printf("*");
             } else {
+                /* --- n'est pas un bord --- */
                 printf("#");
             }
             j++;
