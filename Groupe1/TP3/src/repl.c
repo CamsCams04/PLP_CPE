@@ -6,22 +6,23 @@
  * Programme qui simule un interpréteur de commandes simple.
  * Il lit les commandes utilisateur et les traite en fonction de leur contenu.
  */
-// struct Commande
-// {
-//     char name[255];
-// };
 enum Functions{
     version,
     help,
-    echo,
-    quit,
+    echo, 
+    quit, 
     date
 };
+struct Commande
+{
+    char param[255];
+    enum Functions enume;
+};
 
-void afficher_version();
-void afficher_help();
-void traiter_echo(const char *commande);
-int quiting();
+// void afficher_version();
+// void afficher_help();
+// void traiter_echo(const char *commande);
+// int quiting();
 
 void afficher_version(){
     char version[255] = "12.12.12";
@@ -60,6 +61,16 @@ int main()
 {
     int continuer = 1; // Variable pour contrôler la boucle principale
 
+    struct Commande commandes[] = {
+        {"quit",    quit},
+        {"quitter", quit},
+        {"echo",    echo},
+        {"version", version},
+        {"help",    help},
+        {"aider",   help},
+        {"date",    date}
+    };
+    
     // Boucle principale qui lit et traite les commandes utilisateur
     while (continuer)
     {
@@ -75,16 +86,15 @@ int main()
         commande[strcspn(commande, "\n")] = 0;
 
         enum Functions fonction = -1;
-        if (strcmp(commande, "quit") == 0)
-            fonction = quit;
-        else if (strncmp(commande, "echo ", 5) == 0)
-            fonction = echo;
-        else if (strcmp(commande, "version") == 0)
-            fonction = version;
-        else if (strcmp(commande, "help") == 0)
-            fonction = help;
-        else if (strcmp(commande, "date") == 0)
-            fonction = date;
+
+        int nb_commandes = sizeof(commandes);
+
+        for( int i = 0 ; i < nb_commandes;i++){
+            if (strncmp(commande, commandes[i].param, strlen(commandes[i].param)) == 0) {
+                fonction = commandes[i].enume;
+                break;
+            }
+        }
 
         switch (fonction)
         {
