@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "lexer.h"
 #include "parseur.h"
+#include "evaluation.h"
 
 // Enumeration des différentes commandes
 enum Functions{
@@ -24,8 +25,6 @@ struct Commande
     enum Functions enume;
     char lang[255];
 };
-
-
 
 /**
  * Affichage de la version
@@ -139,6 +138,10 @@ void traiter_calc(const char *commande){
             ))
     );
     printf("Parseur: opération: %c, opérande1: %g, opérande2: %g\n", opview, expr->lhs, expr->rhs);
+    
+    double resultat = evaluation_calc(opview, expr->lhs, expr->rhs);
+    printf("Résultat : %g\n", resultat);
+    
     free(expr);
     free(toks);
     free(result);
