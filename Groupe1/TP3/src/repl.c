@@ -187,7 +187,7 @@ int main()
 
         switch (fonction) {
             case quit:
-                continuer = quiting();
+                continuer = quiting(langue);
                 break;
             case echo:
                 traiter_echo(commande);
