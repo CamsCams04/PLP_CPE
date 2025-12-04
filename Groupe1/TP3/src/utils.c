@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "utils.h"
 
-#define CMD_COUNT 7
+#define CMD_COUNT 8
 
 // Enumeration des possibilités de quitter
 const char *typos_quitter[] = {
@@ -54,6 +54,12 @@ const char *typos_date[] = {
     "dzte", "datr", "dqte", "daet", "dare"
 };
 
+const char *typos_calc[] = {
+    "alc", "clac", "cacl", "callc", "calcc", 
+    "calk", "cavc", "cal", "calx"
+};
+
+
 // tableau global
 const char **commands_typos[CMD_COUNT] = {
     typos_quitter,
@@ -62,7 +68,8 @@ const char **commands_typos[CMD_COUNT] = {
     typos_version,
     typos_help,
     typos_aider,
-    typos_aide
+    typos_aide,
+    typos_calc
 };
 
 const char *command_names[CMD_COUNT] = {
@@ -72,7 +79,8 @@ const char *command_names[CMD_COUNT] = {
     "version",
     "help",
     "aider",
-    "aide"
+    "aide",
+    "calc"
 };
 
 /**

@@ -2,8 +2,9 @@
 #include <time.h>
 #include <string.h>
 #include <stdlib.h>
+#include "lexer.h"
 
-static char** lexeur(char *input){
+char** lexeur(char *input){
 
     const char *separateur = " ";
 
@@ -18,14 +19,4 @@ static char** lexeur(char *input){
     }
 
     return arrayToken;
-}
-
-int main() {
-    char test[] = "12 + 1 /  3";
-    char **result = lexeur(test);
-    for (int i = 0; result[i] != NULL; i++) {
-        printf("Token[%d]: %s\n", i, result[i]);
-    }
-    free(result);
-    return 0;
 }

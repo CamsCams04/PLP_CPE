@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <errno.h>
 #include "date_utils.h"
 #include "utils.h"
+#include "lexer.h"
+#include "parseur.h"
 
 // Enumeration des différentes commandes
 enum Functions{
@@ -9,7 +13,8 @@ enum Functions{
     help,
     echo, 
     quit, 
-    date
+    date,
+    calc
 };
 
 // Structure d'une commande
@@ -68,6 +73,77 @@ void traiter_echo(const char *commande){
     printf("\n"); // Saut de ligne après la sortie
 }
 
+/**
+ * Traitemet de ma commande calc
+ * {char *} - commande
+ */
+void traiter_calc(const char *commande){
+    char input[255] = "";
+    strcat(input, commande + 5);
+
+    char **result = lexeur(input);
+    if(!result) {
+        printf("Lexer error: résultat NULL\n");
+        return;
+    }
+
+    // compte des tokens
+    int count_token = 0;
+    while(result[count_token] != NULL) count_token++;
+
+    // Convertion en struct tocken
+    struct Token *toks = malloc(sizeof(*toks) * (count_token + 1));
+    if(!toks) {
+        printf("Erreur d'allocation des tokens\n");
+        free(result);
+        return;
+    }
+    for(int i = 0; i < count_token; i++) {
+        const char *s = result[i];
+        toks[i].raw = s;
+        toks[i].op = 0;
+        toks[i].value = 0.0;
+
+        char *end = NULL;
+        errno = 0;
+        double value = strtod(s, &end);
+        if(end && *end == '\0') {        // si toute la chaîne est un nombre
+            toks[i].type = TOK_NUMBER;
+            toks[i].value = value;        // ⚡ stocker la valeur
+        } else if (s[0] != '\0' && s[1] == '\0' && 
+                (s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/')) {
+            toks[i].type = TOK_OPERATOR;
+            toks[i].op = s[0];
+        } else {
+            toks[i].type = TOK_INVALID;
+        }
+    }
+    toks[count_token].type = TOK_EOF;
+    toks[count_token].raw = NULL;
+    toks[count_token].op = 0;
+    toks[count_token].value = 0.0;
+
+    char *err = NULL;
+    struct Expression *expr = parse_tokens(toks, count_token + 1, &err);
+    if (!expr) {
+        printf("Parse Erreur: %s\n", err ? err : "inconnue");
+        free(err);
+        free(toks);
+        free(result);
+        return;
+    }
+    char opview = (
+        expr->op==OP_ADD?'+': (
+            expr->op==OP_DIV?'/': (
+                expr->op==OP_MUL?'*':'-'
+            ))
+    );
+    printf("Parseur: opération: %c, opérande1: %g, opérande2: %g\n", opview, expr->lhs, expr->rhs);
+    free(expr);
+    free(toks);
+    free(result);
+}
+
 
 int quiting(const char *langue){
     // Quitte le programme si la commande est "quit"
@@ -95,7 +171,8 @@ int main()
         {"help",    help,   "en"},
         {"aider",   help,   "fr"},
         {"aide", help, "fr"},
-        {"date",    date, "fr"}
+        {"date",    date, "fr"},
+        {"calc", calc, "fr"}
     };
 
     int nb_commandes = sizeof(commandes) / sizeof(commandes[0]);
@@ -152,6 +229,9 @@ int main()
                 break;
             case date:
                 afficher_date();
+                break;
+            case calc: 
+                traiter_calc(commande);
                 break;
             default:
                 gestion_erreur(commande);
