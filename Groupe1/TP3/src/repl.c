@@ -88,17 +88,17 @@ void afficher_help(const char *langue){
         printf("================================\n");
         printf("echo <texte>   : Affiche le texte saisi après la commande.\n");
         printf("version        : Affiche la version du programme.\n");
-        printf("help           : Affiche cette liste d'aide.\n");
+        printf("aider          : Affiche cette liste d'aide.\n");
         printf("date           : Afficher la date\n");
-        printf("\nquit           : Quitte le programme.\n");
+        printf("\nquitter      : Quitte le programme.\n");
     } else if (strcmp(langue, "en") == 0) {
-        printf("Voici la liste des commandes :\n");
+        printf("Command list :\n");
         printf("================================\n");
-        printf("echo <texte>   : Affiche le texte saisi après la commande.\n");
-        printf("version        : Affiche la version du programme.\n");
-        printf("help           : Affiche cette liste d'aide.\n");
-        printf("date           : Afficher la date\n");
-        printf("\nquit           : Quitte le programme.\n");
+        printf("echo <text>     : Display text after the command.\n");
+        printf("version         : Display program version.\n");
+        printf("help            : Dislay help.\n");
+        printf("date            : Display current date\n");
+        printf("\nquit          : Quit this program.\n");
     }
 };
 
@@ -117,12 +117,15 @@ void traiter_echo(const char *commande){
 }
 
 
-int quiting(){
+int quiting(const char *langue){
     // Quitte le programme si la commande est "quit"
-    printf("Arrêt...\n");
+        if (strcmp(langue, "fr") == 0) {
+            printf("Arrêt...\n");
+        } else if (strcmp(langue, "en") == 0) {
+            printf("Stopping...\n");
+        }
     return 0;
 }
-
 
 /**
  * Programme qui simule un interpréteur de commandes simple.
