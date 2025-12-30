@@ -7,6 +7,7 @@
 #include "lexer.h"
 #include "parseur.h"
 #include "evaluation.h"
+#include "infix_to_postfix.h"
 
 // Enumeration des différentes commandes
 enum Functions{
@@ -77,74 +78,53 @@ void traiter_echo(const char *commande){
  * {char *} - commande
  */
 void traiter_calc(const char *commande){
+    /* --- Extraction de l'expression après "calc " --- */
     char input[255] = "";
     strcat(input, commande + 5);
 
+    /* --- LEXER --- */
     char **result = lexeur(input);
     if(!result) {
         printf("Lexer error: résultat NULL\n");
         return;
     }
 
-    // compte dGroupe1/TP3/srces tokens
+    // compte des tokens
     int count_token = 0;
     while(result[count_token] != NULL) count_token++;
 
-    // Convertion en struct tocken
-    struct Token *toks = malloc(sizeof(*toks) * (count_token + 1));
-    if(!toks) {
-        printf("Erreur d'allocation des tokens\n");
-        free(result);
-        return;
-    }
-    for(int i = 0; i < count_token; i++) {
-        const char *s = result[i];
-        toks[i].raw = s;
-        toks[i].op = 0;
-        toks[i].value = 0.0;
-
-        char *end = NULL;
-        errno = 0;
-        double value = strtod(s, &end);
-        if(end && *end == '\0') {        // si toute la chaîne est un nombre
-            toks[i].type = TOK_NUMBER;
-            toks[i].value = value;        // ⚡ stocker la valeur
-        } else if (s[0] != '\0' && s[1] == '\0' && 
-                (s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/')) {
-            toks[i].type = TOK_OPERATOR;
-            toks[i].op = s[0];
-        } else {
-            toks[i].type = TOK_INVALID;
-        }
-    }
-    toks[count_token].type = TOK_EOF;
-    toks[count_token].raw = NULL;
-    toks[count_token].op = 0;
-    toks[count_token].value = 0.0;
-
-    char *err = NULL;
-    struct Expression *expr = parse_tokens(toks, count_token + 1, &err);
-    if (!expr) {
-        printf("Parse Erreur: %s\n", err ? err : "inconnue");
-        free(err);
-        free(toks);
-        free(result);
-        return;
-    }
-    char opview = (
-        expr->op==OP_ADD?'+': (
-            expr->op==OP_DIV?'/': (
-                expr->op==OP_MUL?'*':'-'
-            ))
-    );
-    printf("Parseur: opération: %c, opérande1: %g, opérande2: %g\n", opview, expr->lhs, expr->rhs);
-    
-    double resultat = evaluation_calc(opview, expr->lhs, expr->rhs);
-    printf("Résultat : %g\n", resultat);
-    
-    free(expr);
-    free(toks);
+   // Conversion infixée -> postfixée
+   char *postfix = infix_to_postfix(result, count_token);
+   if(!postfix) {
+    printf("Erreur conversion infix -> postfix\n");
     free(result);
+    return;
+   }
+
+   printf("Postfix : %s\n", postfix);
+
+   // LEXER expression postfixée
+   char **post_tokens = lexeur(postfix);
+    if (!post_tokens) {
+        printf("Erreur lexer postfix\n");
+        free(postfix);
+        free(result);
+        return;
+    }
+
+    int post_count = 0;
+    while (post_tokens[post_count] != NULL) post_count++;
+
+
+    // Evaluation postfixée
+    double result_final = eval_postfix(post_tokens, post_count);
+
+    printf("Résultat : %g\n", result_final);
+
+    // Nettoyage mémoire
+    free(postfix);
+    free(result);
+    free(post_tokens);
 }
 
 
