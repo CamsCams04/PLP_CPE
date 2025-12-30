@@ -79,7 +79,7 @@ void traiter_echo(const char *commande){
  */
 void traiter_calc(const char *commande){
     /* --- Extraction de l'expression après "calc " --- */
-    char input[255] = "";
+    char input[256] = "";
     strcat(input, commande + 5);
 
     /* --- LEXER --- */
@@ -93,13 +93,13 @@ void traiter_calc(const char *commande){
     int count_token = 0;
     while(result[count_token] != NULL) count_token++;
 
-   // Conversion infixée -> postfixée
-   char *postfix = infix_to_postfix(result, count_token);
-   if(!postfix) {
-    printf("Erreur conversion infix -> postfix\n");
-    free(result);
-    return;
-   }
+    // Conversion infixée -> postfixée
+    char *postfix = infix_to_postfix(result, count_token);
+    if(!postfix) {
+        printf("Erreur conversion postfix\n");
+        free(result);
+        return;
+    }
 
    printf("Postfix : %s\n", postfix);
 
