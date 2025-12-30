@@ -97,6 +97,8 @@ void traiter_calc(const char *commande){
     char *postfix = infix_to_postfix(result, count_token);
     if(!postfix) {
         printf("Erreur conversion postfix\n");
+        // libération mémoire
+        for(int i=0; i<count_token; i++) free(result[i]);
         free(result);
         return;
     }
