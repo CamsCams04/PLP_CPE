@@ -56,7 +56,7 @@ const char *typos_date[] = {
 
 const char *typos_calc[] = {
     "alc", "clac", "cacl", "callc", "calcc", 
-    "calk", "cavc", "cal", "calx"
+    "calk", "cavc", "cal", "calx", "clc"
 };
 
 
