@@ -7,6 +7,7 @@
 #include "lexer.h"
 #include "parseur.h"
 #include "evaluation.h"
+#include "infix_to_postfix.h"
 
 // Enumeration des différentes commandes
 enum Functions{
@@ -75,11 +76,15 @@ void traiter_echo(const char *commande){
 /**
  * Traitemet de ma commande calc
  * {char *} - commande
+ * - Exercice 3.4 : lexer + parseur simple + évaluation (A op B)
+ * - Exercice 4.1 : conversion infixée → postfixée + évaluation postfixée
  */
 void traiter_calc(const char *commande){
+    /* --- Extraction de l'expression après "calc " --- */
     char input[255] = "";
     strcat(input, commande + 5);
 
+    /* --- LEXER --- */
     char **result = lexeur(input);
     if(!result) {
         printf("Lexer error: résultat NULL\n");
@@ -90,7 +95,12 @@ void traiter_calc(const char *commande){
     int count_token = 0;
     while(result[count_token] != NULL) count_token++;
 
+    /* --------------------------- */
+    /* --- PARTIE EXERCICE 3.4 --- */
+    /* --------------------------- */
+
     // Convertion en struct tocken
+    /* 
     struct Token *toks = malloc(sizeof(*toks) * (count_token + 1));
     if(!toks) {
         printf("Erreur d'allocation des tokens\n");
@@ -144,7 +154,44 @@ void traiter_calc(const char *commande){
     
     free(expr);
     free(toks);
+    */
+
+   /* --------------------------- */
+   /* --- PARTIE EXERCICE 4.1 --- */
+   /* --------------------------- */
+
+   // Conversion infixée -> postfixée
+   char *postfix = infix_to_postfix(result, count_token);
+   if(!postfix) {
+    printf("Erreur conversion infix -> postfix\n");
     free(result);
+    return;
+   }
+
+   printf("Postfix : %s\n", postfix);
+
+   // LEXER expression postfixée
+   char **post_tokens = lexeur(postfix);
+    if (!post_tokens) {
+        printf("Erreur lexer postfix\n");
+        free(postfix);
+        free(result);
+        return;
+    }
+
+    int post_count = 0;
+    while (post_tokens[post_count] != NULL) post_count++;
+
+
+    // Evaluation postfixée
+    double result_final = eval_postfix(post_tokens, post_count);
+
+    printf("Résultat : %g\n", result_final);
+
+    // Nettoyage mémoire
+    free(postfix);
+    free(result);
+    free(post_tokens);
 }
 
 
