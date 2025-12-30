@@ -26,40 +26,45 @@ double evaluation_calc(char operateur, double lhs, double rhs) {
     }
 }
 
-double eval_postfix(char **tokens, int count) {
+double eval_postfix(char **tokens, int count)
+{
     double stack[100];
     int top = -1;
 
     for (int i = 0; i < count; i++) {
         char *tok = tokens[i];
 
+        /* --- Si nombre --- */
         char *end;
         double val = strtod(tok, &end);
-
-        // Si nombre
         if (*end == '\0') {
             stack[++top] = val;
+            continue;
         }
-        // Si opérateur
-        else if (strlen(tok) == 1 && strchr("+-*/", tok[0])) {
+
+        /* --- Si opérateur --- */
+        if (strlen(tok) == 1 && strchr("+-*/", tok[0])) {
             if (top < 1) {
                 printf("Erreur postfix : pas assez d'opérandes\n");
                 return 0;
             }
+
             double rhs = stack[top--];
             double lhs = stack[top--];
 
             double res = evaluation_calc(tok[0], lhs, rhs);
             stack[++top] = res;
+            continue;
         }
-        else {
-            printf("Token invalide : %s\n", tok);
-            return 0;
-        }
+
+        /* --- Token invalide --- */
+        printf("Token invalide : %s\n", tok);
+        return 0;
     }
 
+    /* --- Vérification finale --- */
     if (top != 0) {
-        printf("Erreur postfix : pile invalide\n");
+        printf("Erreur postfix : expression invalide\n");
         return 0;
     }
 
