@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <ctype.h>
 #include "date_utils.h"
 #include "utils.h"
 #include "lexer.h"
@@ -141,6 +142,10 @@ int quiting(const char *langue){
     return 0;
 }
 
+/**
+ * Traitement de l'affectation d'une variable
+ * {char *} - input
+ */
 void traiter_affectation(const char *input) {
     char name[128];
     char value[256];
@@ -159,6 +164,103 @@ void traiter_affectation(const char *input) {
     }
 
     printf("Variable %s définie\n", name);
+}
+
+/**
+ * Traitement d'une focntion lambda
+ * {char *} - input
+ */
+void traiter_lambda(const char *input) {
+    char var;
+    char expr[256]; // expression
+    char arg[64]; // arguments
+
+    if (strncmp(input, "(lambda", 7) != 0) {
+        printf("Erreur : lambda invalide\n");
+        return;
+    }
+    
+    /* --- Récupération variable --- */
+    const char *dot = strchr(input, '.');
+    if (!dot || dot - input < 8) {
+        printf("Erreur de syntaxe lambda\n");
+        return;
+    }
+    var = *(dot - 1);
+
+    /* --- Trouver parenthèse fermante lambda --- */
+    const char *end = strrchr(input, ')');
+    if (!end) {
+        printf("Erreur : parenthèse manquante\n");
+        return;
+    }
+
+    /* --- Extraction expression --- */
+    int len = end - (dot + 1);
+    strncpy(expr, dot + 1, len);
+    expr[len] = '\0';
+
+    /* --- Extraction argument*/
+    if (sscanf(end + 1, " %63s", arg) != 1) {
+        printf("Erreur : argument lambda manquant\n");
+        return;
+    }
+
+    /* --- Résolution de la valeur de l'argument --- */
+    char value_str[64];
+
+    if (isalpha(arg[0])) {
+        Variable *v = find_variable(arg);
+        if (!v) {
+            printf("Erreur : la variable %s n'est pas définie\n", arg);
+            return;
+        }
+
+        if (v->type == VAR_INT)
+            sprintf(value_str, "%d", v->value.i);
+        else if (v->type == VAR_DOUBLE)
+            sprintf(value_str, "%g", v->value.d);
+        else {
+            printf("Erreur : type invalide pour lambda\n");
+            return;
+        }
+    } else {
+        strcpy(value_str, arg);
+    }
+
+    /* --- Vérification que l'argument est numérique --- */
+    char *endptr;
+    strtod(value_str, &endptr);
+    if (*endptr != '\0') {
+        printf("Erreur : argument lambda non numérique\n");
+        return;
+    }
+
+    for (int i = 0; expr[i]; i++) {
+        if (isalpha(expr[i]) && expr[i] != var) {
+            printf("Erreur : variable '%c' non autorisée dans lambda\n", expr[i]);
+            return;
+        }
+    }
+
+    /* --- Substitution --- */
+    char final_expr[512] = "";
+    char buf[2] = {0};
+
+    for (int i = 0; expr[i]; i++) {
+        if (expr[i] == var) {
+            strcat(final_expr, value_str);
+        } else {
+            buf[0] = expr[i];
+            strcat(final_expr, buf);
+        }
+    }
+
+    /* --- Calcul --- */
+    char calc_cmd[600] = "calc ";
+    strcat(calc_cmd, final_expr);
+
+    traiter_calc(calc_cmd);
 }
 
 
@@ -194,6 +296,13 @@ int main()
         /* --- Gestion des variables : affectation --- */
         if (strchr(commande, '=') != NULL) {
             traiter_affectation(commande);
+            printf("\n");
+            continue;
+        }
+
+        /* --- Gestion du lambda --- */
+        if (strncmp(commande, "(lambda", 7) == 0) {
+            traiter_lambda(commande);
             printf("\n");
             continue;
         }

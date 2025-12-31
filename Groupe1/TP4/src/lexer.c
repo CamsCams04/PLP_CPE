@@ -9,7 +9,7 @@ char** lexeur(const char *input) {
     char **tokens = calloc(255, sizeof(char*));
     if (!tokens) return NULL;
 
-    int t = 0;
+     int t = 0;
     int i = 0;
 
     while (input[i]) {
