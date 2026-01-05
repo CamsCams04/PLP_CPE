@@ -15,7 +15,7 @@
 - internet
 
 ## Difficulté
-
+* 5.2 tout faire fonctionner ensemble et correctement
 
 ## Commentaires
 

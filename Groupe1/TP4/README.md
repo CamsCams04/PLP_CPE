@@ -13,7 +13,7 @@
 * Internet
 
 # Difficulté
-* Exo 4.1
+* Exo 4.1 création de la pile
 * 
 
 # Commentaires
