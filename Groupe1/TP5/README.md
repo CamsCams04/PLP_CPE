@@ -1,15 +1,21 @@
-# Bibliothèques
-* 
-*
 
-# Références
-*
-*
+## Bibliothèques utilisées
+* stdio.h
+* time.h
+* string.h
+* stdlib.h
+* errno.h
+* ctype.h
 
-# Difficulté
-*
+## Références
+- stackoverflow
+- github copilot
+- openclassroom
+- Documentation
+- internet
 
-# Commentaires
-* 
-* 
+## Difficulté
+
+
+## Commentaires
 
